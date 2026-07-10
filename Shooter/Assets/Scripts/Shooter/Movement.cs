@@ -17,6 +17,7 @@ public class Movement : MonoBehaviour
     public InputAction look;
     public InputAction fire;
     public GameObject projectilePrefab;
+    public float damage;
     public float jumpHeight = 2f;
     public float gravity = -9.81f;
     public float sprintMultiplier = 1.5f; 
@@ -98,12 +99,43 @@ public class Movement : MonoBehaviour
         cameraHolder.localRotation = Quaternion.Euler(mouseRotationX, 0f, 0f);
     }
 
-     void OnFire()
+    /*legacy projectile based shooting
+    void OnFire()
     {
         if (fire.triggered && !PauseMenu.gameIsPaused)
         {
             Vector3 spawnPos = cameraHolder.position + cameraHolder.forward * 1f;
             Instantiate(projectilePrefab, spawnPos, cameraHolder.rotation);
         }
+    } */
+
+    void OnFire()
+    {
+        if (fire.triggered && !PauseMenu.gameIsPaused)
+        {
+            Ray ray = new Ray(cameraHolder.position, cameraHolder.forward);
+            RaycastHit hit;
+
+            if (Physics.Raycast(ray, out hit))
+            {
+                GameObject hitObject = hit.collider.gameObject;
+                Debug.Log("Hit: " + hitObject.name);
+
+                Health targetHealth = hit.collider.GetComponentInParent<Health>();
+                if (targetHealth != null && targetHealth.CompareTag("Enemy"))
+                {
+                    targetHealth.TakeDamage(damage);
+                }
+                else if (targetHealth != null)
+                {
+                    Debug.LogWarning("Hit a Health object but it is not tagged Enemy: " + targetHealth.gameObject.name);
+                }
+                else
+                {
+                    Debug.Log("No enemy Health found on hit object.");
+                }
+            }
+        }
     }
 }
+

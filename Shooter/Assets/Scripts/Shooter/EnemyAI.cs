@@ -8,8 +8,8 @@ public class EnemyAI : MonoBehaviour
     public float waitTimeMin = 1f;
     public float waitTimeMax = 3f;
 
-    public float chaseRange = 10f;
-    public float losePlayerRange = 15f;
+    public float chaseRange = 20f;
+    public float losePlayerRange = 30f;
     private Transform[] waypoints;
     private NavMeshAgent agent;
     private Transform player;
@@ -19,8 +19,8 @@ public class EnemyAI : MonoBehaviour
     public GameObject enemyBulletPrefab;
     public Transform firePoint;
     public float fireRate = 1f;
-    public float shootRange = 10f;
-    private float fireCooldown = 0f;
+    public float shootRange = 100f;
+    private float fireCooldown = 3f;
 
     private enum State { Patrol, Chase }
     private State currentState = State.Patrol;
@@ -110,7 +110,7 @@ public class EnemyAI : MonoBehaviour
         fireCooldown -= Time.deltaTime;
         if (fireCooldown <= 0f)
         {
-            ShootAtPlayer();
+            //ShootAtPlayer();
             fireCooldown = 1f / fireRate;
         }
     }
@@ -125,14 +125,14 @@ public class EnemyAI : MonoBehaviour
             SceneManager.LoadScene(0);
         }
     }
-    void ShootAtPlayer()
+    /*void ShootAtPlayer()
     {
         if (enemyBulletPrefab == null || firePoint == null) return;
 
 
         GameObject bullet = Instantiate(enemyBulletPrefab, firePoint.position, Quaternion.identity);
 
-        Vector3 direction = (player.position + Vector3.up * 1.5f) - firePoint.position; // Adjust for player height
+        Vector3 direction = (player.position + Vector3.up * 1.5f) - firePoint.position;
         bullet.transform.rotation = Quaternion.LookRotation(direction);
 
 
@@ -141,5 +141,5 @@ public class EnemyAI : MonoBehaviour
         {
             rb.linearVelocity = direction.normalized * bullet.GetComponent<Bullet>().projectileVelocity;
         }
-    }
+    }*/
 }

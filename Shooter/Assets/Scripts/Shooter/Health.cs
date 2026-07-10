@@ -2,18 +2,18 @@ using UnityEngine;
 
 public class Health : MonoBehaviour
 {
-    public float maxHealth = 100f;  
+    public float maxHealth;  
     private float currentHealth;
 
-        void Awake()
+        void Start()
     {
         currentHealth = maxHealth; 
     }
 
     
-    public void TakeDamage(float amount)
+    public void TakeDamage(float damage)
     {
-        currentHealth -= amount;
+        currentHealth -= damage;
 
         if (currentHealth <= 0)
         {
